@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { requireAuth, resolveActiveOrg } from "@/lib/auth/server";
@@ -8,8 +9,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TeamMembersClient } from "./_components/TeamMembersClient";
 import { TeamInvitesClient } from "./_components/TeamInvitesClient";
 import { AttendantsClient } from "./_components/AttendantsClient";
+import { fusoUtilizavel } from "@/lib/tempo/fusos";
 
 export const dynamic = "force-dynamic";
+export const metadata: Metadata = { title: "Equipe" };
 
 /**
  * As duas abas são endereçáveis, e isso não é conveniência.
@@ -76,7 +79,7 @@ export default async function TeamPage({
         </TabsContent>
         <TabsContent value="attendants" className="mt-4">
           {isManager ? (
-            <AttendantsClient canManage={isManager} />
+            <AttendantsClient canManage={isManager} organizationTimezone={fusoUtilizavel(activeOrg?.timezone)} />
           ) : (
             <p className="text-sm text-muted-foreground">
               {/*
